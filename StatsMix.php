@@ -117,7 +117,7 @@ class StatsMix{
 	 * @param array $options Hash of additional values you want to pass in - currently ref_id, generated_at, meta but may include others in the future
 	 */
 	
-	function track($name, $value = null, $options = array()){
+	static function track($name, $value = null, $options = array()){
 		self::$error = false;
 		if(self::$ignore)
 			return true;
