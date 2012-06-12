@@ -269,10 +269,10 @@ abstract class SmBase{
 			//simplexml isn't really an object (per comment at http://www.php.net/manual/en/class.simplexmlelement.php#100811)
 			//so we convert to an array, then an object again
 			$this->_data = (object) (array) simplexml_load_string($this->_response);
-			$this->_error = @$this->_data->error;
+			$this->_error = (isset($this->_data->error)?$this->_data->error:null);
 		} else {
 			$this->_data = (object) json_decode($this->_response);
-			$this->_error = @$this->_data->errors->error;
+			$this->_error = (isset($this->_data->errors->error)?$this->_data->errors->error:null);
 		}
 	}
 	public function __set($name,$value)
@@ -349,7 +349,7 @@ abstract class SmResource extends SmBase
 		$result = parent::_post($data);
 		if(!$this->_error)
 		{
-			$this->_id = @$this->_data->id ? $this->_data->id : false;
+			$this->_id = ((isset($this->_data->id) && $this->_data->id) ? $this->_data->id : false);
 		}	
 		return $result;
 	}
@@ -829,7 +829,7 @@ class SmTrack extends SmBase{
 		if($value != null)
 			$data['value'] = $value;
 		$data = array_merge($options,$data);
-		if(is_array(@$data['meta']))
+		if(isset($data['meta']) && is_array($data['meta']))
 			$data['meta'] = json_encode($data['meta']);
 		return $this->_post($data);
 	}
